@@ -1,5 +1,5 @@
 /* ============================================
-   710-MSSV | Main JavaScript
+   710-231A290052 | Main JavaScript
    ============================================ */
 
 // ── Navigation Toggle ──
@@ -259,7 +259,7 @@ function handleRegistration() {
 
   // Show success
   if (successEl) {
-    successEl.textContent = '✓ Đăng ký thành công! Dữ liệu đã được lưu.';
+    successEl.textContent = 'Đăng ký thành công! Dữ liệu đã được lưu.';
     successEl.classList.add('show');
   }
 
