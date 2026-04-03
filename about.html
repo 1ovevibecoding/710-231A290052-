@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Trả lời phần lý thuyết — Đề thi kết thúc học phần Thiết kế Web">
+  <title>Trả lời Lý thuyết | 710-MSSV</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <img src="images/avatar.jpg" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=710&background=a855f7&color=fff&size=64'">
+        <span>710-MSSV</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="baitap01.html">BT1: Sản phẩm</a></li>
+        <li><a href="baitap02.html">BT2: Đăng ký</a></li>
+        <li><a href="baitap03.html">BT3: Đếm ngược</a></li>
+        <li><a href="about.html" class="active">Lý thuyết</a></li>
+        <li><a href="baitap18.html">Bài tập 18</a></li>
+        <li><a href="baitap19.html">Bài tập 19</a></li>
+        <li><a href="contact.html">Điểm danh</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>📚 Trả lời Lý thuyết</h1>
+    <p>Giải thích logic tư duy cho từng bài tập thực hành</p>
+  </div>
+
+  <div class="container">
+
+    <!-- ═══ BÀI TẬP 1 ═══ -->
+    <div class="theory-section" id="theory-bt1">
+      <h2><span class="badge">1</span> Bài tập 1 — Danh sách sản phẩm & Tìm kiếm</h2>
+
+      <h3>Cách xử lý input người dùng để tránh lỗi injection</h3>
+      <ul>
+        <li><strong>XSS (Cross-Site Scripting):</strong> Khi render sản phẩm ra DOM, toàn bộ nội dung người dùng nhập được xử lý qua hàm <code>escapeHtml()</code> — thay thế các ký tự đặc biệt (<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>, <code>"</code>, <code>'</code>) thành HTML entities tương ứng. Điều này ngăn chặn attacker chèn thẻ <code>&lt;script&gt;</code> vào ô tìm kiếm.</li>
+        <li><strong>Sanitize input:</strong> Hàm <code>sanitizeInput()</code> sử dụng <code>document.createElement('div')</code> + <code>textContent</code> để loại bỏ mọi HTML tag trước khi xử lý tìm kiếm. Kết hợp <code>.trim()</code> để xóa khoảng trắng thừa.</li>
+        <li><strong>Không dùng innerHTML trực tiếp với user input:</strong> Dữ liệu sản phẩm được escape trước khi đưa vào <code>innerHTML</code>. Trong thực tế nên dùng <code>textContent</code> hoặc thư viện template engine (như Handlebars) có auto-escaping.</li>
+      </ul>
+
+      <h3>Tối ưu tìm kiếm</h3>
+      <ul>
+        <li><strong>Case-insensitive:</strong> Dùng <code>.toLowerCase()</code> trên cả input và tên sản phẩm để tìm kiếm không phân biệt hoa thường.</li>
+        <li><strong>Debounce:</strong> Sử dụng <code>setTimeout</code> với 200ms delay để tránh gọi search liên tục mỗi keystroke — giảm tải render.</li>
+        <li><strong>Filter trên mảng:</strong> Dùng <code>Array.prototype.filter()</code> + <code>String.prototype.includes()</code> — độ phức tạp O(n) với n là số sản phẩm. Với dataset nhỏ (< 1000 items) rất hiệu quả.</li>
+      </ul>
+
+      <h3>Code minh họa</h3>
+      <pre><code>function sanitizeInput(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.textContent.trim().toLowerCase();
+}
+
+// Debounce search
+let timeout;
+searchInput.addEventListener('input', () => {
+  clearTimeout(timeout);
+  timeout = setTimeout(searchProducts, 200);
+});</code></pre>
+    </div>
+
+    <!-- ═══ BÀI TẬP 2 ═══ -->
+    <div class="theory-section" id="theory-bt2">
+      <h2><span class="badge">2</span> Bài tập 2 — Form Đăng ký & Bảo mật</h2>
+
+      <h3>Cách xử lý sự kiện submit</h3>
+      <ul>
+        <li><strong>preventDefault():</strong> Gọi <code>e.preventDefault()</code> trên sự kiện <code>submit</code> để ngăn form reload trang — cho phép validate hoàn toàn bằng JavaScript phía client.</li>
+        <li><strong>Validate tuần tự:</strong> Kiểm tra từng trường theo thứ tự: tên → email → mật khẩu → checkbox. Dừng ngay ở lỗi đầu tiên bằng <code>return showError()</code>, tránh hiển thị quá nhiều thông báo lỗi cùng lúc.</li>
+        <li><strong>Email validation:</strong> Dùng regex <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code> kiểm tra định dạng email cơ bản (có @, có domain). Trong thực tế nên bổ sung server-side validation.</li>
+        <li><strong>Password validation:</strong> Regex <code>/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/</code> đảm bảo mật khẩu ≥ 8 ký tự, có ít nhất 1 chữ hoa, 1 chữ thường, 1 số, sử dụng lookahead assertions.</li>
+      </ul>
+
+      <h3>Bảo mật dữ liệu cục bộ (LocalStorage)</h3>
+      <ul>
+        <li><strong>Không lưu mật khẩu:</strong> Trong code, chỉ lưu <code>name</code>, <code>email</code>, <code>registeredAt</code> vào LocalStorage. Mật khẩu <strong>KHÔNG</strong> được lưu dưới dạng plaintext — trong thực tế, mật khẩu phải được hash (ví dụ: bcrypt) ở phía server.</li>
+        <li><strong>Hạn chế của LocalStorage:</strong> Dữ liệu lưu trong LocalStorage không được mã hóa, bất kỳ JavaScript nào chạy trên cùng origin đều có thể đọc được. Do đó, <strong>không nên lưu thông tin nhạy cảm</strong> (token, password) trong LocalStorage cho production app.</li>
+        <li><strong>try/catch:</strong> Wrap LocalStorage operations trong <code>try/catch</code> để xử lý trường hợp storage đầy hoặc bị disabled (private browsing mode).</li>
+      </ul>
+
+      <h3>Code minh họa</h3>
+      <pre><code>// Chỉ lưu info không nhạy cảm
+const userData = {
+  name: name,
+  email: email,
+  registeredAt: new Date().toISOString()
+};
+
+try {
+  const users = JSON.parse(localStorage.getItem('registered_users') || '[]');
+  users.push(userData);
+  localStorage.setItem('registered_users', JSON.stringify(users));
+} catch (e) {
+  console.error('LocalStorage error:', e);
+}</code></pre>
+    </div>
+
+    <!-- ═══ BÀI TẬP 3 ═══ -->
+    <div class="theory-section" id="theory-bt3">
+      <h2><span class="badge">3</span> Bài tập 3 — Đồng hồ Đếm ngược & Memory Leak</h2>
+
+      <h3>Xử lý interval để tránh memory leak</h3>
+      <ul>
+        <li><strong>clearInterval trước khi setInterval mới:</strong> Mỗi lần gọi <code>startTimer()</code>, luôn <code>clearInterval(timerInterval)</code> trước khi tạo interval mới. Nếu không, mỗi lần bấm Start sẽ tạo thêm 1 interval chồng chất → timer chạy nhanh gấp đôi, gấp ba.</li>
+        <li><strong>Cleanup khi hết giờ:</strong> Khi <code>totalSeconds <= 0</code>, gọi <code>clearInterval()</code> và đặt <code>timerInterval = null</code> ngay lập tức — giải phóng reference.</li>
+        <li><strong>Biến flag isPaused:</strong> Sử dụng biến boolean <code>isPaused</code> để kiểm tra trạng thái, tránh tạo nhiều interval khi user bấm Start nhiều lần.</li>
+      </ul>
+
+      <h3>Tích hợp với Domain/Hosting nếu deploy</h3>
+      <ul>
+        <li><strong>Đồng bộ thời gian server:</strong> Trong thực tế, countdown nên lưu thời điểm kết thúc (end time) trên server (API) thay vì đếm local. Client sẽ tính <code>remaining = endTime - Date.now()</code>, đảm bảo nhiều user cùng thấy chung thời gian.</li>
+        <li><strong>Xử lý tab không hoạt động:</strong> Khi tab bị minimize, browser throttle <code>setInterval</code>. Giải pháp: dùng <code>Date.now()</code> để tính thời gian thực tế thay vì tin vào mỗi lần gọi callback.</li>
+        <li><strong>Service Worker / Server-Sent Events:</strong> Cho ứng dụng đấu giá, thi trắc nghiệm, có thể dùng WebSocket hoặc SSE để server push thời gian còn lại về client, đảm bảo đồng bộ chính xác.</li>
+      </ul>
+
+      <h3>Code minh họa</h3>
+      <pre><code>function startTimer() {
+  if (!isPaused) return; // Ngăn tạo nhiều interval
+  isPaused = false;
+
+  // Clear interval cũ → tránh memory leak
+  if (timerInterval) clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    if (totalSeconds <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null; // Giải phóng reference
+      isPaused = true;
+      showModal('timer-modal');
+      return;
+    }
+    totalSeconds--;
+    updateTimerDisplay();
+  }, 1000);
+}</code></pre>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 710-MSSV | Bài thi kết thúc học phần — Thiết kế Web</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

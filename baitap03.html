@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài tập 3: Đồng hồ đếm ngược countdown timer">
+  <title>BT3: Đồng hồ Đếm ngược | 710-MSSV</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <img src="images/avatar.jpg" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=710&background=a855f7&color=fff&size=64'">
+        <span>710-MSSV</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="baitap01.html">BT1: Sản phẩm</a></li>
+        <li><a href="baitap02.html">BT2: Đăng ký</a></li>
+        <li><a href="baitap03.html" class="active">BT3: Đếm ngược</a></li>
+        <li><a href="about.html">Lý thuyết</a></li>
+        <li><a href="baitap18.html">Bài tập 18</a></li>
+        <li><a href="baitap19.html">Bài tập 19</a></li>
+        <li><a href="contact.html">Điểm danh</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>⏱️ Đồng hồ Đếm ngược</h1>
+    <p>Bài tập 3 (20 điểm) — Countdown 10 phút, animation cảnh báo, modal khi hết giờ</p>
+  </div>
+
+  <!-- Timer Section -->
+  <section class="timer-section" id="timer-display">
+    <!-- SVG Ring -->
+    <div class="timer-ring">
+      <svg viewBox="0 0 280 280">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#a855f7" />
+            <stop offset="100%" stop-color="#ec4899" />
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="140" cy="140" r="130" />
+        <circle class="ring-progress" cx="140" cy="140" r="130" />
+      </svg>
+      <div class="timer-inner">
+        <div class="time">10:00</div>
+        <div class="label">Còn lại</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="timer-controls">
+      <button class="btn btn-primary" id="timer-start">▶ Bắt đầu</button>
+      <button class="btn btn-outline" id="timer-pause">⏸ Tạm dừng</button>
+      <button class="btn btn-outline" id="timer-reset">↻ Đặt lại</button>
+    </div>
+  </section>
+
+  <!-- Timer Expired Modal -->
+  <div class="modal-overlay" id="timer-modal">
+    <div class="modal-content">
+      <div class="modal-icon warning">⏰</div>
+      <h2>Hết thời gian!</h2>
+      <p>Đồng hồ đếm ngược 10 phút đã kết thúc. Bấm đặt lại để chạy lại.</p>
+      <button class="btn btn-primary" onclick="closeModal('timer-modal')">Đóng</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 710-MSSV | Bài thi kết thúc học phần — Thiết kế Web</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

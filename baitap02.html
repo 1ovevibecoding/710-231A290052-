@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bài tập 2: Form đăng ký người dùng với validation">
+  <title>BT2: Form Đăng ký | 710-MSSV</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <img src="images/avatar.jpg" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=710&background=a855f7&color=fff&size=64'">
+        <span>710-MSSV</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="baitap01.html">BT1: Sản phẩm</a></li>
+        <li><a href="baitap02.html" class="active">BT2: Đăng ký</a></li>
+        <li><a href="baitap03.html">BT3: Đếm ngược</a></li>
+        <li><a href="about.html">Lý thuyết</a></li>
+        <li><a href="baitap18.html">Bài tập 18</a></li>
+        <li><a href="baitap19.html">Bài tập 19</a></li>
+        <li><a href="contact.html">Điểm danh</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>📝 Form Đăng ký</h1>
+    <p>Bài tập 2 (20 điểm) — Validate email, mật khẩu, lưu LocalStorage</p>
+  </div>
+
+  <!-- Form -->
+  <div class="container-sm">
+    <div class="form-card">
+      <div class="form-error" id="reg-error"></div>
+      <div class="form-success" id="reg-success"></div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="reg-name">Họ và tên</label>
+          <input type="text" id="reg-name" placeholder="Nguyễn Văn A" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="your@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Mật khẩu</label>
+          <div class="input-wrapper">
+            <input type="password" id="reg-password" placeholder="Ít nhất 8 ký tự" required>
+            <button type="button" class="toggle-password" id="toggle-password">👁️</button>
+          </div>
+          <div class="password-strength">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          <p class="password-hint" id="password-hint">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số</p>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="reg-terms">
+          <label for="reg-terms">Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a></label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;" id="btn-register">Đăng ký tài khoản</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="reg-success-modal">
+    <div class="modal-content">
+      <div class="modal-icon success">✓</div>
+      <h2>Đăng ký thành công!</h2>
+      <p>Thông tin tài khoản đã được lưu vào LocalStorage. Bạn có thể kiểm tra trong DevTools → Application → LocalStorage.</p>
+      <button class="btn btn-primary" onclick="closeModal('reg-success-modal')">Đóng</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 710-MSSV | Bài thi kết thúc học phần — Thiết kế Web</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
